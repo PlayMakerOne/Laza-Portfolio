@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laza ANDRIAMAMPIANINA - Portfolio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <!-- Lien vers la feuille de style CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -17,8 +21,14 @@
             <div class="nav-icon">
                 <a href="#accueil"><span>Laza </span></a>
             </div>
+            <!-- Bouton hamburger pour mobile -->
+            <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
             <!-- Menu de navigation à droite -->
-            <nav class="nav-menu">
+            <nav class="nav-menu" role="navigation">
                 <ul>
                     <li><a href="#accueil">Accueil</a></li>
                     <li><a href="#about">À propos</a></li>
@@ -30,6 +40,9 @@
         </div>
     </header>
 
+    <!-- Overlay pour le menu mobile -->
+    <div class="nav-overlay"></div>
+
     <!-- MAIN : contenu principal -->
     <main>
         <!-- SECTION ACCUEIL (home) -->
@@ -39,6 +52,10 @@
             <div class="accueil-content">
                 <h1>Laza ANDRIAMAMPIANINA</h1>
                 <p class="subtitle">Développeur Full Stack</p>
+            </div>
+            <div class="scroll-indicator">
+                <span>Scroll</span>
+                <div class="mouse"></div>
             </div>
         </section>
 

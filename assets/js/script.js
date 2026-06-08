@@ -1,43 +1,140 @@
-// Gestion de l'envoi du formulaire de contact
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const contactForm = document.querySelector('.contact-form');
-    
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    const sections = document.querySelectorAll('section[id]');
+    const header = document.querySelector('.navbar-fixed');
+    const overlay = document.querySelector('.nav-overlay');
+
+    // === Hamburger Menu ===
+    if (navToggle && navMenu) {
+        function closeMenu() {
+            navMenu.classList.remove('open');
+            navToggle.classList.remove('active');
+            navToggle.setAttribute('aria-expanded', 'false');
+            if (overlay) overlay.classList.remove('visible');
+        }
+
+        function openMenu() {
+            navMenu.classList.add('open');
+            navToggle.classList.add('active');
+            navToggle.setAttribute('aria-expanded', 'true');
+            if (overlay) overlay.classList.add('visible');
+        }
+
+        navToggle.addEventListener('click', function () {
+            if (navMenu.classList.contains('open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        navLinks.forEach(function (link) {
+            link.addEventListener('click', closeMenu);
+        });
+
+        if (overlay) {
+            overlay.addEventListener('click', closeMenu);
+        }
+    }
+
+    // === Active Nav Link on Scroll ===
+    function updateActiveLink() {
+        let current = '';
+        sections.forEach(function (section) {
+            const top = section.offsetTop - 200;
+            const bottom = top + section.offsetHeight;
+            if (window.scrollY >= top && window.scrollY < bottom) {
+                current = section.getAttribute('id');
+            }
+        });
+        navLinks.forEach(function (link) {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // === Scroll Reveal Animations ===
+    function setupRevealAnimations() {
+        const revealElements = document.querySelectorAll(
+            '.section-content > h2, .about-container, .competences-liste, .projets-grille, .contact-container'
+        );
+
+        revealElements.forEach(function (el, index) {
+            el.classList.add('reveal');
+            el.style.transitionDelay = (index * 0.1) + 's';
+        });
+
+        document.querySelectorAll('.competence-item').forEach(function (el, i) {
+            el.classList.add('reveal-scale');
+            el.style.transitionDelay = (i * 0.05) + 's';
+        });
+
+        document.querySelectorAll('.projet-card').forEach(function (el, i) {
+            el.classList.add('reveal');
+            el.style.transitionDelay = (i * 0.1) + 's';
+        });
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(function (el) {
+            observer.observe(el);
+        });
+    }
+
+    // === Handle Scroll Events with throttling ===
+    let ticking = false;
+    window.addEventListener('scroll', function () {
+        if (!ticking) {
+            window.requestAnimationFrame(function () {
+                updateActiveLink();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    updateActiveLink();
+    setupRevealAnimations();
+
+    // === Contact Form ===
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Empêche le rechargement de la page
-            
-            // Récupération des données du formulaire
+        contactForm.addEventListener('submit', function (e) {
+            e.preventDefault();
             const formData = new FormData(contactForm);
             const data = Object.fromEntries(formData.entries());
-            
-            // Simuler un envoi (vous pouvez remplacer par un vrai fetch vers votre back-end)
             console.log('Données envoyées :', data);
-            
-            // Afficher un message de succès
             afficherMessage('success', 'Message envoyé avec succès !');
-            
-            // Réinitialiser le formulaire
             contactForm.reset();
         });
     }
-    
-    // Fonction pour afficher un message temporaire sous le formulaire
+
     function afficherMessage(type, texte) {
-        // Supprimer un éventuel ancien message
         const ancienMessage = document.querySelector('.form-status');
         if (ancienMessage) ancienMessage.remove();
-        
-        // Créer l'élément message
+
         const messageDiv = document.createElement('div');
-        messageDiv.className = `form-status ${type}`;
+        messageDiv.className = 'form-status ' + type;
         messageDiv.textContent = texte;
-        
-        // Insérer après le bouton submit
+
         const submitBtn = document.querySelector('.contact-form button[type="submit"]');
         submitBtn.insertAdjacentElement('afterend', messageDiv);
-        
-        // Faire disparaître le message après 5 secondes
-        setTimeout(() => {
+
+        setTimeout(function () {
             messageDiv.remove();
         }, 5000);
     }
