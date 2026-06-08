@@ -4,6 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio de Laza ANDRIAMAMPIANINA, développeur Full Stack Java Spring Boot & React. Découvrez mes projets et compétences.">
+    <meta name="keywords" content="développeur, full stack, java, spring boot, react, portfolio">
+    <meta name="author" content="Laza ANDRIAMAMPIANINA">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Laza ANDRIAMAMPIANINA - Portfolio">
+    <meta property="og:description" content="Développeur Full Stack Java Spring Boot & React">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://playmakerone.github.io">
+    <meta property="og:image" content="assets/picture/ppDeProfile/photo de profile.jpg">
+    <meta property="og:locale" content="fr_FR">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Laza ANDRIAMAMPIANINA - Portfolio">
+    <meta name="twitter:description" content="Développeur Full Stack Java Spring Boot & React">
     <title>Laza ANDRIAMAMPIANINA - Portfolio</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,6 +28,8 @@
 </head>
 
 <body>
+    <!-- Lien d'évitement pour l'accessibilité -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
     <!-- HEADER : Navigation fixe -->
     <header class="navbar-fixed">
         <div class="nav-container">
@@ -44,11 +60,12 @@
     <div class="nav-overlay"></div>
 
     <!-- MAIN : contenu principal -->
-    <main>
+    <main id="main-content">
         <!-- SECTION ACCUEIL (home) -->
         <section id="accueil" class="section-accueil">
             <!-- Image de fond (background picture) -->
             <div class="accueil-bg"></div>
+            <canvas id="particles-canvas" aria-hidden="true"></canvas>
             <div class="accueil-content">
                 <h1>Laza ANDRIAMAMPIANINA</h1>
                 <p class="subtitle">Développeur Full Stack</p>
@@ -157,18 +174,42 @@
                 <h2>Projets</h2>
                 <div class="projets-grille">
                     <article class="projet-card">
-                        <h3>ERP - Flam's</h3>
-                        <p>Ma mission consistait à concevoir et développer un dispositif de formation destiné aux futurs
-                            employés du restaurant.</p>
+                        <div class="projet-image" style="background:#613cf2;">
+                            <span class="projet-image-label">F</span>
+                        </div>
+                        <div class="projet-body">
+                            <h3>ERP - Flam's</h3>
+                            <p>Conception et développement d'un dispositif de formation destiné aux employés du restaurant.</p>
+                            <div class="projet-links">
+                                <a href="https://github.com/PlayMakerOne" target="_blank" rel="noopener noreferrer" class="projet-link">
+                                    <img src="assets/picture/icon/contact/github.png" alt="Voir le code source"> Code
+                                </a>
+                            </div>
+                        </div>
                     </article>
                     <article class="projet-card">
-                        <h3>Application de messagerie instantané - chatterBox</h3>
-                        <p>Dans le cadre d'un projet fil rouge en formation avec mon collègue, on a dû concevoir et
-                            coder une application de messagerie instantanée.</p>
+                        <div class="projet-image" style="background:#4a2ac0;">
+                            <span class="projet-image-label">C</span>
+                        </div>
+                        <div class="projet-body">
+                            <h3>ChatterBox</h3>
+                            <p>Application de messagerie instantanée conçue et développée en binôme dans le cadre d'un projet fil rouge.</p>
+                            <div class="projet-links">
+                                <a href="https://github.com/PlayMakerOne" target="_blank" rel="noopener noreferrer" class="projet-link">
+                                    <img src="assets/picture/icon/contact/github.png" alt="Voir le code source"> Code
+                                </a>
+                            </div>
+                        </div>
                     </article>
-                    <article class="projet-card">
-                        <h3>à venir</h3>
-                        <p>Je travaille actuellement sur un projet, qui est encore en cours de développement.</p>
+                    <article class="projet-card projet-card-coming">
+                        <div class="projet-image" style="background:linear-gradient(135deg, #613cf2, #ae9fe9);">
+                            <span class="projet-image-label">?</span>
+                        </div>
+                        <div class="projet-body">
+                            <h3>Projet en cours</h3>
+                            <p>Un nouveau projet est en cours de développement. Je dévoilerai bientôt plus de détails ici même.</p>
+                            <span class="projet-badge">À venir</span>
+                        </div>
                     </article>
                 </div>
             </div>
@@ -181,7 +222,7 @@
                 <div class="contact-container">
                     <!-- Colonne gauche : formulaire -->
                     <div class="contact-form-col">
-                        <form action="#" method="post" class="contact-form">
+                        <form action="https://formspree.io/f/xpznqvqz" method="POST" class="contact-form">
                             <div class="form-group">
                                 <label for="nom">Nom</label>
                                 <input type="text" id="nom" name="nom" required>
@@ -203,12 +244,8 @@
                                 <textarea id="description" name="description" rows="5" required></textarea>
                             </div>
                             <button type="submit">Envoyer</button>
+                            <p class="form-alt">Ou envoyez un email directement à <a href="mailto:laza.andriamampianina67@gmail.com">laza.andriamampianina67@gmail.com</a></p>
                         </form>
-                        <!-- Deuxième champ "nom" (optionnel) -->
-                        <!-- <div class="form-group second-nom">
-                    <label for="nom2">Nom</label>
-                    <input type="text" id="nom2" name="nom2">
-                </div> -->
                     </div>
                     <!-- Colonne droite : icônes de contact -->
                     <div class="contact-icons-col">

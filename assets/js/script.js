@@ -96,8 +96,84 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // === Handle Scroll Events with throttling ===
-    let ticking = false;
+    // === Particles System ===
+    function setupParticles() {
+        var canvas = document.getElementById('particles-canvas');
+        if (!canvas) return;
+
+        var ctx = canvas.getContext('2d');
+        var particles = [];
+        var mouseX = -1000;
+        var mouseY = -1000;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        var particleCount = Math.min(Math.floor(window.innerWidth * 0.05), 70);
+
+        for (var i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 3 + 1,
+                speedX: (Math.random() - 0.5) * 0.5,
+                speedY: (Math.random() - 0.5) * 0.5,
+                opacity: Math.random() * 0.5 + 0.2
+            });
+        }
+
+        canvas.addEventListener('mousemove', function (e) {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        canvas.addEventListener('mouseleave', function () {
+            mouseX = -1000;
+            mouseY = -1000;
+        });
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (var i = 0; i < particles.length; i++) {
+                var p = particles[i];
+                var dx = mouseX - (canvas.getBoundingClientRect().left + p.x);
+                var dy = mouseY - (canvas.getBoundingClientRect().top + p.y);
+                var dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 150) {
+                    var force = (150 - dist) / 150 * 0.02;
+                    p.x -= dx * force;
+                    p.y -= dy * force;
+                }
+
+                p.x += p.speedX;
+                p.y += p.speedY;
+
+                if (p.x < -10) p.x = canvas.width + 10;
+                if (p.x > canvas.width + 10) p.x = -10;
+                if (p.y < -10) p.y = canvas.height + 10;
+                if (p.y > canvas.height + 10) p.y = -10;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + p.opacity + ')';
+                ctx.fill();
+            }
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+    }
+
+    // === Handle Scroll ===
+    var ticking = false;
     window.addEventListener('scroll', function () {
         if (!ticking) {
             window.requestAnimationFrame(function () {
@@ -110,28 +186,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateActiveLink();
     setupRevealAnimations();
+    setupParticles();
 
     // === Contact Form ===
     if (contactForm) {
         contactForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData.entries());
-            console.log('Données envoyées :', data);
-            afficherMessage('success', 'Message envoyé avec succès !');
-            contactForm.reset();
+            var submitBtn = contactForm.querySelector('button[type="submit"]');
+            var formGroup = contactForm.querySelector('.form-alt');
+
+            if (contactForm.getAttribute('action') && contactForm.getAttribute('action').startsWith('https://formspree.io')) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Envoi en cours...';
+
+                setTimeout(function () {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Envoyer';
+                }, 3000);
+            } else {
+                e.preventDefault();
+                var formData = new FormData(contactForm);
+                var data = Object.fromEntries(formData.entries());
+                console.log('Données du formulaire :', data);
+                afficherMessage('success', 'Message prêt à être envoyé ! Utilisez le lien email ci-dessous.');
+                contactForm.reset();
+            }
         });
     }
 
     function afficherMessage(type, texte) {
-        const ancienMessage = document.querySelector('.form-status');
+        var ancienMessage = document.querySelector('.form-status');
         if (ancienMessage) ancienMessage.remove();
 
-        const messageDiv = document.createElement('div');
+        var messageDiv = document.createElement('div');
         messageDiv.className = 'form-status ' + type;
         messageDiv.textContent = texte;
 
-        const submitBtn = document.querySelector('.contact-form button[type="submit"]');
+        var submitBtn = document.querySelector('.contact-form button[type="submit"]');
         submitBtn.insertAdjacentElement('afterend', messageDiv);
 
         setTimeout(function () {
